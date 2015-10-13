@@ -11,12 +11,14 @@ public class Game {
     public static void main(String[] args) throws Exception {
         System.out.println("Welcome to the my text adventure");
         player = new Player();
-        while (true) {
-            player.chooseName();
-            player.chooseWeapon();
-            player.chooseArea();
-            player.findItem("apple");
-        }
+        player.chooseName();
+        player.chooseWeapon();
+        player.chooseArea();
+        player.findItem("apple");
+
+        Enemy ogre = new Enemy("Ogre", 50, 5);
+        player.battle(ogre);
+
     }
     static String nextLine() {
         Scanner scanner = new Scanner(System.in);

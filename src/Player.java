@@ -3,16 +3,20 @@ import java.util.ArrayList;
 /**
  * Created by holdenhughes on 10/9/15.
  */
-public class Player {
-    String name;
+public class Player extends Character {
     String weapon;
     String area;
     ArrayList items = new ArrayList();
 
+    public Player(){
+        health = 100;
+        damage = 20;
+    }
+
     void chooseName() {
         System.out.println("What is your name traveler?");
         name = Game.nextLine();
-        System.out.println("Good Luck, " + name);
+        System.out.println(String.format("Good Luck, %s",name));
     }
 
     void chooseWeapon() throws Exception {
@@ -47,7 +51,7 @@ public class Player {
         System.out.println("Find item! Pick it up? [y/n]");
         String s = Game.nextLine();
         if (s.equals("y")) {
-            System.out.println("You found a " + item);
+            System.out.println(String.format("You found a  %s", item));
             items.add(item);
         }
     }
