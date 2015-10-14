@@ -1,5 +1,10 @@
 import com.sun.corba.se.impl.orbutil.ObjectWriter;
+import jodd.json.JsonParser;
+import jodd.json.JsonSerializer;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 /**
@@ -10,19 +15,28 @@ public class Game {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Welcome to the my text adventure");
-        player = new Player();
-        player.chooseName();
-        player.chooseWeapon();
-        player.chooseArea();
-        player.findItem("apple");
 
-        Weapon ogreweapon = new Weapon();
-        ogreweapon.name = "Club";
-        ogreweapon.damage = 5;
-        Enemy ogre = new Enemy("Ogre", 50, 5, ogreweapon);
+        player = loadGame();
+
+        if (player == null) {
+            player = new Player();
+            player.chooseName();
+            player.chooseWeapon();
+            player.chooseArea();
+            player.findItem("apple");
+        }
+
+        Weapon ogreWeapon = new Weapon();
+        ogreWeapon.name = "Club";
+        ogreWeapon.damage = 5;
+        Enemy ogre = new Enemy("Ogre", 50, 5, ogreWeapon);
+
         player.battle(ogre);
 
+        saveGame();
+
     }
+
     static String nextLine() {
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
@@ -34,7 +48,7 @@ public class Game {
             } else if (s.equals("/Exit")) {
                 System.exit(0);
             } else if (s.equals("/inv")) {
-                if (player.items.size() ==0){
+                if (player.items.size() == 0) {
                     System.out.println("You have no items");
                 }
                 for (Object item : player.items) {
@@ -44,6 +58,38 @@ public class Game {
             return nextLine();
         } else {
             return s;
+        }
+    }
+
+    static void saveGame() {
+        File f = new File("save.json");
+        JsonSerializer serializer = new JsonSerializer();
+        String contentToSave = serializer.serialize(player);
+
+        try {
+            FileWriter fw = new FileWriter(f);
+            fw.write(contentToSave);
+            fw.close();
+        } catch (Exception e) {
+
+        }
+    }
+
+    static Player loadGame() {
+        try {
+            File f = new File("save.json");
+            FileReader fr = new FileReader(f);
+            int fileSize = (int) f.length();
+            char[] contents = new char[fileSize];
+            fr.read(contents);
+            String fileContents = new String(contents);
+            System.out.println(fileContents);
+            JsonParser parser = new JsonParser();
+            return parser.parse(fileContents, Player.class);
+
+        } catch (Exception e){
+            return null;
+
         }
     }
 }
