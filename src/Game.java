@@ -12,10 +12,10 @@ import java.util.Scanner;
  */
 public class Game {
     static Player player;
+    static final String FILE_NAME = "save.json";
 
     public static void main(String[] args) throws Exception {
         System.out.println("Welcome to the my text adventure");
-
         player = loadGame();
 
         if (player == null) {
@@ -62,7 +62,7 @@ public class Game {
     }
 
     static void saveGame() {
-        File f = new File("save.json");
+        File f = new File(FILE_NAME);
         JsonSerializer serializer = new JsonSerializer();
         String contentToSave = serializer.serialize(player);
 
@@ -77,7 +77,7 @@ public class Game {
 
     static Player loadGame() {
         try {
-            File f = new File("save.json");
+            File f = new File(FILE_NAME);
             FileReader fr = new FileReader(f);
             int fileSize = (int) f.length();
             char[] contents = new char[fileSize];
