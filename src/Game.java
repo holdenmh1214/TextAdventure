@@ -51,7 +51,7 @@ public class Game {
                 if (player.items.size() == 0) {
                     System.out.println("You have no items");
                 }
-                for (Object item : player.items) {
+                for (String item : player.items) {
                     System.out.println(item);
                 }
             }
